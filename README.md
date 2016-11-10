@@ -1,4 +1,4 @@
-##Contributions
+## Contributions
 
 If you rather add functionality to 'GimmeBot', just clone the repository!
 
@@ -10,6 +10,6 @@ Run:
 
 Engine for Intelligent Data Processing/Reporting/Execution (TODO: Modify Statemtnt)
 
-##Configuration
+## Configuration
 
 Clone and Run! (Todo: Modify accordingly)
