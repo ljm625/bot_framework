@@ -4,7 +4,7 @@ If you rather add functionality to 'GimmeBot', just clone the repository!
 
 Run:
 
-	git clone -o stash ssh://git@gitscm.cicso.com/sa/gimmebot
+	git clone -o stash ssh://git@gitscm.cisco.com/sa/gimmebot
 
 ## Why we chose GimmeBot.
 
