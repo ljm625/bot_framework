@@ -3,7 +3,7 @@
 # Purpose: this file is for doing meta data preprocessing
 
 
-from dataDBconn import connCreate, getDBdata, getAPIdata
+from dataDBconn import connCreate, getDBdata
 
 metaDataSql = "select * from information_schema.columns where table_schema != 'information_schema'"
 dbtype = 'mysql'
@@ -41,4 +41,3 @@ print urlKeyValueSQL
 
 keyValueData = getDBdata(conn, urlKeyValueSQL)
 
-print type(keyValueData)
