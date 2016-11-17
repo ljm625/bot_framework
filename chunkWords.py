@@ -21,6 +21,10 @@ def chunk_sentence(json_sentence):
             print words
             tagged = nltk.pos_tag(words)
             chunk_gram = r"""Chunked: {<RB.>*<VB.?>*<NNP>+<NN>?} """
+
+            ## what is the storage capacity of filer a?
+            ## automate the creation of the chunk rules over time
+
             chunk_parser = nltk.RegexpParser(chunk_gram)
             chunked = chunk_parser.parse(tagged)
             print chunked

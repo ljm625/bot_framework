@@ -29,10 +29,12 @@ def pre_proc_data_fetch(colList,topic):
 
 # prints 3 columns where a search criteria filters
 print metaDataDF[['TABLE_NAME','COLUMN_NAME','COLUMN_COMMENT']].where(metaDataDF['COLUMN_NAME'].str.contains('url') == True).drop_duplicates().dropna()
-
 print metaDataDF['COLUMN_COMMENT'].iloc[:2].where(metaDataDF['TABLE_NAME'] == 'application_dimension').drop_duplicates()
 
+## Topics
 tableName = ''
+
+## Datapoint
 searchName = ''
 
 urlKeyValueSQL = "SELECT name, url FROM %s WHERE name = '%s'" % (tableName,searchName)

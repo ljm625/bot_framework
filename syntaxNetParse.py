@@ -11,10 +11,8 @@ def sentenceInput(sentence):
     url = "http://localhost:9000/api/v1/query"
     payload = "{\n   \"strings\": [\"%s\"]\n}" % sentence
     headers = {
-        'authorization': "Basic YWRtaW5pc3RyYXRvcjphZG1pbmlzdHJhdG9y",
         'content-type': "application/json",
         'cache-control': "no-cache",
-        'postman-token': "4ee89f2a-8cc5-0ae9-40ea-fb5f7c8a7ad3"
     }
 
     response = requests.request("POST", url, data=payload, headers=headers)
