@@ -23,7 +23,7 @@ api = Api(app)
 
 class MessageParser(Resource):
 
-    def post(self, id):
+    def post(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('id', type=str, required=True, help='id is a required field.',
                                    location='json')
