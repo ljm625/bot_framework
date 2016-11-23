@@ -30,4 +30,37 @@ class SparkAPI(object):
         else:
             if resp.json() is not None:
                 return resp.json()['text']
+    def get_membership(self,mem_id):
+        def buildUrl():
+            return self.url+'memberships/'+str(mem_id)
+        resp=requests.get(buildUrl(),headers=self.headers)
+        if resp.status_code >= 300:
+            print "Error in the api"
+            print resp.status_code
+            resp.raise_for_status()
+        else:
+            if resp.json() is not None:
+                return resp.json()['personEmail']
+
+    def send_message(self,message,room_id=None,person_id=None):
+        def buildUrl():
+            return self.url+'messages'
+        def buildJson():
+            if room_id:
+                return {
+                    "roomId":room_id,
+                    "markdown":message
+                }
+            elif person_id:
+                return{
+                    "toPersonId":person_id,
+                    "markdown":message
+                }
+        resp=requests.post(buildUrl(),json=buildJson(),headers=self.headers)
+        if resp.status_code >= 300:
+            print "Error in the api"
+            print resp.status_code
+            resp.raise_for_status()
+        else:
+            return True
 
