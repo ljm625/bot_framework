@@ -77,7 +77,7 @@ class RoomParser(Resource):
             spark.send_message("Hi all, this is GimmeBOT :D",room_id)
         else:
             person_name=args['data']['personDisplayName']
-            spark.send_message("Hello "+str(person_name)+",Welcome to this cool Spark Room :D",room_id)
+            spark.send_message("Hello "+str(person_name)+", Welcome to this cool Spark Room :D",room_id)
         return 204
 
 api.add_resource(MessageParser, '/api/v1/message')
