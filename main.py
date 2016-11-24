@@ -9,17 +9,26 @@
 # This is the main app for parsing the spark webhook.
 
 import traceback
+from pprint import pprint
+
 from flask_cors import CORS, cross_origin
 import config
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 
+from expectParser import ExpectParser
+from keywords import EXPECT_LIST
+from mainParser import MainParser
+from sentenceGenerator import SentenceGenerator
 from sparkAPI import SparkAPI
+from syntaxNetParse import SyntaxParser
 
 app = Flask(__name__)
 CORS(app)
 
 api = Api(app)
+
+EXPECT_OBJECTS={}
 
 class MessageParser(Resource):
 
@@ -43,10 +52,49 @@ class MessageParser(Resource):
         time=args['data']['created']
         # Now we need to retrieve this message.
         if person_email==config.BOT_ACCOUNT:
+            # I don't want to receive infinite messages lol
             return 204
         spark=SparkAPI()
-        print spark.get_message(msg_id)
-        spark.send_message("Hello from spark **BOT**",room_id)
+        message=spark.get_message(msg_id)
+        synparser = SyntaxParser()
+        result = synparser.parse_sentence([message])
+        pprint(result)
+        pos_tag, dep = synparser.tokenize(result[0])
+        print(pos_tag)
+        print(dep)
+        generator = SentenceGenerator()
+        if room_id in EXPECT_OBJECTS:
+            expect = EXPECT_OBJECTS[room_id]
+            expect.parse(result)
+            if not expect.expect_params():
+                # All done
+                reply=[]
+                reply.append(generator.generate_service_review(expect.get_params()))
+                global  EXPECT_OBJECTS
+                del EXPECT_OBJECTS[room_id]
+                reply.append("I will start to execute the service for you. Please wait a few minutes.")
+            else:
+                reply=[]
+                reply.append(generator.generate_service_review(expect.get_params()))
+                reply.append(generator.generate_param_request(expect.expect_params()))
+        else:
+            parser = MainParser(message)
+            action = parser.make_category()
+            if action in EXPECT_LIST:
+                expect = ExpectParser(room_id, 'add_space')
+                reply=[]
+                reply.append('Sure I can definitely help you on that :D')
+                expect.parse(result)
+                global EXPECT_OBJECTS
+                EXPECT_OBJECTS[room_id]=expect
+                reply.append(generator.generate_param_request(expect.expect_params()))
+            else:
+                reply=generator.generate(action)
+        if type(reply)==list:
+            for msg in reply:
+                spark.send_message(msg,room_id)
+        elif type(reply)==str or type(reply)==unicode:
+            spark.send_message(reply, room_id)
         return 204
 
 
