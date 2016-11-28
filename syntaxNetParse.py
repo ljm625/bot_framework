@@ -5,10 +5,11 @@ import requests
 import json
 
 ### REQUIRES THE SYNTAXNET LOCAL DOCKER IMAGE ### ask Jiaming for details
+from config import SYNTAXNET_IP
 
 
 class SyntaxParser(object):
-    def __init__(self,url='http://localhost:9000'):
+    def __init__(self,url=SYNTAXNET_IP):
         self.url=url+'/api/v1/query'
         self.headers={'content-type': "application/json"}
 
