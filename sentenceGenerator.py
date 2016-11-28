@@ -26,7 +26,7 @@ class SentenceGenerator(object):
             return ["Running out of **space**? You came to the right bot :D I can definately help on that!",
                     "I need to get the **server name**, the **size** you want to add and the **path** to increase in order to help."]
         else:
-            return "Sorry, but it seems I can't understand your sentence at the moment, pls check out later :D"
+            return "Sorry, but it seems I can't help at the moment, pls check out later :D"
 
     def generate_param_request(self,params):
         base_sentence='I still need '
