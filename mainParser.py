@@ -31,11 +31,9 @@ class MainParser(object):
     def make_category(self,input=None):
         def deep_loop(cur_stuff):
             if 'contains' in cur_stuff:
-                if 'contains' in cur_stuff:
-                    cat = self.make_category(cur_stuff)
-                    if cat != 'Unknown':
-                        return cat
-                return 'Unknown'
+                cat = self.make_category(cur_stuff)
+                if cat != 'Unknown':
+                    return cat
             return 'Unknown'
         if not input:
             input=self.result
@@ -52,7 +50,7 @@ class MainParser(object):
                         result = deep_loop(stuff)
                         if result != 'Unknown':
                             return result
-            return 'GREETINGS'
+            return 'Unknown'
         elif 'VB' in tag:
             # Need to do something
             # Try to check whether it is suitable for this category
@@ -65,7 +63,7 @@ class MainParser(object):
                         result = deep_loop(stuff)
                         if result != 'Unknown':
                             return result
-            return 'ACTIONS'
+            return 'Unknown'
         elif 'NN' in tag:
             if 'contains' in input:
                 for stuff in input['contains']:
@@ -76,7 +74,7 @@ class MainParser(object):
                         result=deep_loop(stuff)
                         if result!='Unknown':
                             return result
-            return 'Name'
+            return 'Unknown'
         # elif tag=='NN':
         else:
             if 'WRB' in pos_tag and str(pos_tag['WRB'][0]).lower()=='how':
@@ -108,10 +106,12 @@ class MainParser(object):
     def check_action(self,category,stuff):
         CatInfo=KEYWORDS[category]
         # exec 'CatInfo='+category
+        # Update : Enable the function of OR here.
         for option,info in CatInfo.items():
-            root,root_tag = self.get_root()
-            if (stuff['pos_tag'] in info and stuff['name'].lower() in info[stuff['pos_tag']])\
-                    or (root_tag in info and root.lower() in info[root_tag]):
+            root, root_tag = self.get_root()
+            check_list=self.build_precheck(info)
+            if (stuff['pos_tag'] in check_list and stuff['name'].lower() in check_list[stuff['pos_tag']])\
+                    or (root_tag in check_list and root.lower() in check_list[root_tag]):
                 # We can continue.
                 pos_tag=self.get_postag(stuff)
                 result=self.loop_check(info,pos_tag)
@@ -119,16 +119,46 @@ class MainParser(object):
                     return option
         return 'Unknown'
 
+    def build_precheck(self,cat_info):
+        result={}
+        for k,v in cat_info.items():
+            if type(v)==dict:
+                for k1,v1 in v.items():
+                    if k1 in result:
+                        result[k1].extend(v1)
+                    else:
+                        result[k1]=v1
+            else:
+                if k in result:
+                    result[k].extend(v)
+                else:
+                    result[k] = v
+        return result
+
+
     def loop_check(self,cur_info,pos_tag):
         try:
             for k, v in cur_info.items():
-                match = False
-                for stuff in pos_tag[k]:
-                    if stuff.lower() in v:
-                        match = True
-                        break
-                if not match:
-                    return False
+                if type(v)==dict:
+                    match = False
+                    for k1, v1 in v.items():
+                        if match:
+                            break
+                        if k1 in pos_tag:
+                            for stuff in pos_tag[k1]:
+                                if stuff in v1:
+                                    match = True
+                                    break
+                    if not match:
+                        return False
+                else:
+                    match = False
+                    for stuff in pos_tag[k]:
+                        if stuff.lower() in v:
+                            match = True
+                            break
+                    if not match:
+                        return False
             return True
         except Exception, e:
             return False
