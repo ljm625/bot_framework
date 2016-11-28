@@ -15,7 +15,7 @@
 GREETINGS={'say_hello':{'UH':['hi','hello']},'say_goodbye':{'UH':['goodbye']},'say_welcome': {'NNS': ['thanks', 'thank']}}
 ACTIONS={'add_space':{'VB':['add','provision','have','get','increase','want','like','need'],
                       # 'JJR':['more'],
-                      'NN':['space','gb','disk','size']},
+                      'NN':['space','gb','disk','size','storage']},
          'say_welcome': {'VBP': ['thanks', 'thank']},
          'no_space':{'VBD':['blew'],'NN':['directory','space','disk','server']}}
 
@@ -54,22 +54,27 @@ space={
     'result': [{
         'filter': 'dep',
         'name': 'pobj',
-        'regex': ''
+        'regex': r'\d+[a-zA-z]+'
     },
     {
         'filter': 'dep',
         'name': 'conj',
-        'regex': r'/\S'
+        'regex': r'\d+[a-zA-z]+'
+    },
+{
+        'filter': 'dep',
+        'name': 'dobj',
+        'regex': r'\d+[a-zA-z]+'
     },
         # Some times it goes direct to the root.
         {
             'filter': 'dep',
             'name': 'ROOT',
-            'regex': ''
+            'regex': '\d+[a-zA-z]+'
         }
     ],
     # This is for the pos_tag match rule
-    'pos_tag': {'OR': {'NN':['path','location','place'],'VB':['provision'], 'IN':['on','at','in','under']}},
+    'pos_tag': {'OR': {'NN':['path','space'],'VB':['need','want','add','provision'], 'IN':['on','at','in','under']}},
     # This is for the dep match rule
     'dep': {}
 }
@@ -97,7 +102,7 @@ path={
     'dep': {}
 }
 ADD_SPACE={'server_name':server,
-           # 'space_size':space,
+           'space_size':space,
            'path':path
            }
 

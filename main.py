@@ -7,7 +7,7 @@
 # @Software: PyCharm
 
 # This is the main app for parsing the spark webhook.
-
+import re
 import traceback
 from pprint import pprint
 
@@ -56,6 +56,11 @@ class MessageParser(Resource):
             return 204
         spark=SparkAPI()
         message=spark.get_message(msg_id)
+        # Remove the BOT Name from the sentence.
+        if config.BOT_NAME in message:
+            message=message.replace(config.BOT_NAME,'')
+            message.strip(' ')
+            message=re.sub(' +', ' ', message)
         synparser = SyntaxParser()
         result = synparser.parse_sentence([message])
         pprint(result)
