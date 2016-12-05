@@ -12,7 +12,7 @@
 
 ###We need to implement the tense form transformation
 
-GREETINGS = {'say_hello': {'UH': ['hi', 'hello']}, 'say_goodbye': {'UH': ['goodbye']},
+GREETINGS = {'hello': {'UH': ['hi', 'hello']}, 'goodbye': {'UH': ['goodbye']},
              'say_welcome': {'NNS': ['thanks', 'thank']}}
 ACTIONS = {'add_space': {'OR': {'VB': ['add', 'provision', 'have', 'get', 'increase', 'want', 'like', 'need','give'],
                                 'JJR': ['more']},
