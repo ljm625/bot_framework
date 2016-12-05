@@ -6,6 +6,7 @@ import json
 from config import SYNTAXNET_IP
 
 ### REQUIRES THE SYNTAXNET LOCAL DOCKER IMAGE ### ask Jiaming for details
+from config import SYNTAXNET_IP
 
 
 class SyntaxParser(object):
