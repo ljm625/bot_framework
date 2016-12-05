@@ -10,12 +10,13 @@ import random
 from datetime import datetime
 from Phrases import Phrases
 
+# Returns a random phrase from a list of phrases.
 class PhrasePicker(str):
 
     actions = ['hello', 'no_problem', 'goodbye', 'not_sure']
 
     def __init___(self,action):
-        self = self.get_phrase(action)
+        self = self.__get_phrase__(action)
 
     def __get_phrase__(self,action):
         random.seed(datetime.now())
