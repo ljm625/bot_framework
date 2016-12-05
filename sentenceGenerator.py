@@ -6,6 +6,7 @@
 # @File    : sentenceGenerator.py
 # @Software: PyCharm
 
+from PhrasesPicker import PhrasePicker
 
 class SentenceGenerator(object):
     def __init__(self):
@@ -16,17 +17,10 @@ class SentenceGenerator(object):
         pass
 
     def generate(self,action):
-        if action=='say_hello':
-            return "Hello from the BOT :D What can I do for you?"
-        elif action=='say_welcome':
-            return "You're welcome, it's my pleasure to help ;)"
-        elif action=='ask_time':
-            return "I think it will take approximately **5 minute**."
-        elif action=='no_space':
-            return ["Running out of **space**? You came to the right bot :D I can definately help on that!",
-                    "I need to get the **server name**, the **size** you want to add and the **path** to increase in order to help."]
+        if action in PhrasePicker.actions:
+            return PhrasePicker.get_phrase(action)
         else:
-            return "Sorry, but it seems I can't help at the moment, pls check out later :D"
+            return PhrasePicker.get_phrase('not_sure')
 
     def generate_param_request(self,params):
         base_sentence='I still need '
