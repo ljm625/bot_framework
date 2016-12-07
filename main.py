@@ -47,6 +47,7 @@ class MessageParser(Resource):
         args = self.reqparse.parse_args()
         msg_id=args['data']['id']
         room_id=args['data']['roomId']
+        print room_id
         person_id=args['data']['personId']
         person_email=args['data']['personEmail']
         time=args['data']['created']

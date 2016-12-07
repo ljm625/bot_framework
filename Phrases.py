@@ -27,12 +27,12 @@ class Phrases:
                 "Hello my name is GimmeBot, how can I help you?",
                 "Hi this is GimmeBot, how can I help?",
                 "Hi i'm GimmeBot, what can I help you with?",
-                "Hello, how may I help you?"
-                "Hi! My name is GimmeBot, can I help with something?"
-                "GimmeBot at your service! How may I serve you?"
-                "Hello, how can I help you?"
-                "GimmeBot has arrived! What can I help you with?"
-                "Greetings! What can I do for you?"
+                "Hello, how may I help you?",
+                "Hi! My name is GimmeBot, can I help with something?",
+                "GimmeBot at your service! How may I serve you?",
+                "Hello, how can I help you?",
+                "GimmeBot has arrived! What can I help you with?",
+                "Greetings! What can I do for you?",
                 "Greetings! This is GimmeBot, how can I help?"
                 ]
         return hello
@@ -44,7 +44,7 @@ class Phrases:
             "No problem.",
             "No problem at all!",
             "This was no problem for GimmeBot!",
-            "Not a problem."
+            "Not a problem.",
             "You are welcome."
         ]
         return no_problem

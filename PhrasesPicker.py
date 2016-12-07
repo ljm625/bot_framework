@@ -22,4 +22,7 @@ class PhrasePicker(str):
         random.seed(datetime.now())
         phrase_obj=Phrases()
         phrases = phrase_obj.get(action)
-        return phrases[random.randint(0, len(phrases) - 1)]
+        num=random.randint(0, len(phrases) - 1)
+        print num
+        print phrases[num]
+        return phrases[num]
