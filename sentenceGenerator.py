@@ -17,8 +17,9 @@ class SentenceGenerator(object):
         pass
 
     def generate(self,action):
-        if action in PhrasePicker.actions:
-            return PhrasePicker.get_phrase(action)
+        phasepicker=PhrasePicker()
+        if action in phasepicker.actions:
+            return phasepicker.get_phrase(action)
         elif action == 'say_welcome':
             return "You're welcome, it's my pleasure to help ;)"
         elif action == 'ask_time':
@@ -27,7 +28,7 @@ class SentenceGenerator(object):
             return ["Running out of **space**? You came to the right bot :D I can definately help on that!",
                     "I need to get the **server name**, the **size** you want to add and the **path** to increase in order to help."]
         else:
-            return PhrasePicker.get_phrase('not_sure')
+            return phasepicker.get_phrase('not_sure')
 
     def generate_param_request(self,params):
         base_sentence='I still need '

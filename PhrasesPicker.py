@@ -16,9 +16,10 @@ class PhrasePicker(str):
     actions = ['hello', 'no_problem', 'goodbye', 'not_sure']
 
     def __init___(self,action):
-        self = self.__get_phrase__(action)
+        pass
 
-    def __get_phrase__(self,action):
+    def get_phrase(self,action):
         random.seed(datetime.now())
-        phrases = Phrases.get(action)
+        phrase_obj=Phrases()
+        phrases = phrase_obj.get(action)
         return phrases[random.randint(0, len(phrases) - 1)]
