@@ -39,15 +39,20 @@ server = {
             'name': 'conj',
             'regex': [r'\S+-\S+', r'\S+\.\S+']
         },
+        {
+            'filter': 'dep',
+            'name': 'obj',
+            'regex': [r'\S+-\S+', r'\S+\.\S+']
+        },
         # Some times it goes direct to the root.
         {
             'filter': 'dep',
-            'name': 'ROOT',
+            'name': 'root',
             'regex': [r'\S+-\S+', r'\S+\.\S+']
         }
     ],
     # This is for the pos_tag match rule
-    'pos_tag': {'OR': {'NN': ['server', 'host', 'hostname'], 'VB': ['provision', 'use'],
+    'pos_tag': {'OR': {'NN': ['server', 'host', 'hostname'], 'VB': ['provision', 'use','server'],
                        'IN': ['on', 'at', 'in', 'under', 'to']}},
     # This is for the dep match rule
     'dep': {}
@@ -71,7 +76,7 @@ space = {
         # Some times it goes direct to the root.
         {
             'filter': 'dep',
-            'name': 'ROOT',
+            'name': 'root',
             'regex': '\d+[a-zA-z]+'
         }
     ],
@@ -95,7 +100,11 @@ path = {
         # Some times it goes direct to the root.
         {
             'filter': 'dep',
-            'name': 'ROOT',
+            'name': 'root',
+            'regex': r'/\S'
+        },
+        {
+            'filter': 'brute_force',
             'regex': r'/\S'
         }
     ],

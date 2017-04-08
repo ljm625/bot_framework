@@ -1,0 +1,16 @@
+---
+# The list of all the available components in the gimmebot system
+action_parser:
+  - ActionClassifier
+  - ExpectParser
+deep_learning:
+  - Word2Vec
+generator:
+  - SentenceGenerator
+messenger:
+  - Spark
+nlp:
+  - SyntaxnetParser
+typo_fix:
+  - EnchantParser
+  - DictLearn

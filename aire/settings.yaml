@@ -1,0 +1,16 @@
+---
+# This part set the components used in the workflow
+
+action_parser : ActionClassifier
+service_provider : ExpectParser
+deep_learning: Word2Vec
+generator: SentenceGenerator
+messenger: Spark
+nlp: SyntaxnetParser
+typo_fix: DictLearn
+
+parse_workflow:
+- Spark
+- DictLearn
+- Syntaxnet
+-

@@ -2,31 +2,41 @@
 # -*- coding: utf-8 -*-
 # @Time    : 11/21/2016 1:55 PM
 # @Author  : Jiaming Li  (jiaminli@cisco.com)
-# @Site    : 
+# @Site    :
 # @File    : mainParser.py
 # @Software: PyCharm
 
 # This file is mainly used in parse the sentence
-from keywords import *
-from depParser import DepParser
-from postagParser import PosTagParser
-
-from syntaxNetParse import SyntaxParser
+from aire.action_parser.ActionAbstract import ActionAbstract
+from aire.keywords import *
 
 
-class MainParser(object):
-    def __init__(self,sentence):
-        self.synparser = SyntaxParser()
-        self.result = self.synparser.parse_sentence([sentence])[0]
+class ActionClassifier(ActionAbstract):
+    def __init__(self,sentence,parsed_result):
+        #self.synparser = SyntaxParser()
+        self.result = parsed_result
         self.sentence=sentence
-        self.pos_tag,self.dep=self.synparser.tokenize(self.result)
-        self.depParser=DepParser(self.dep)
-        self.posParser=PosTagParser(self.pos_tag)
+        self.pos_tag,self.label=self.tokenize(parsed_result)
+        #self.depParser=DepParser(self.dep)
+        #self.posParser=PosTagParser(self.pos_tag)
+
+    @classmethod
+    def get_instance(cls,input):
+        assert type(input)==dict
+        if(input.get('sentence') and input.get('parsed_sentence')):
+            return cls(sentence=input.get('sentence'),parsed_result=input.get('parsed_sentence'))
+        else: return None
+
+    def parse_input(self,input):
+        return self.make_category()
 
     def get_root(self):
-        root=self.depParser.get_root()
-        tag=self.posParser.find_word_tag(root)
-        return root,tag
+        root=self.label['root'][0]
+        for j,k in self.pos_tag.items():
+            for ele in k:
+                if ele==root:
+                    return root,j
+        return root,None
 
     def make_category(self,input=None):
         def deep_loop(cur_stuff):
@@ -38,7 +48,7 @@ class MainParser(object):
         if not input:
             input=self.result
         tag=input['pos_tag']
-        pos_tag,dep=self.synparser.tokenize(input)
+        pos_tag,dep=self.tokenize(input)
         if tag=='UH' or tag=='NNS':
             # This should be a greeting
             if 'contains' in input:
@@ -94,7 +104,7 @@ class MainParser(object):
                     return 'Unknown'
 
     def get_postag(self,input):
-        pos_tag,dep=self.synparser.tokenize(input)
+        pos_tag,dep=self.tokenize(input)
         root, tag = self.get_root()
         if tag in pos_tag:
             pos_tag[tag].append(root)
@@ -110,7 +120,7 @@ class MainParser(object):
         for option,info in CatInfo.items():
             root, root_tag = self.get_root()
             check_list=self.build_precheck(info)
-            if (stuff['pos_tag'] in check_list and stuff['name'].lower() in check_list[stuff['pos_tag']])\
+            if (stuff['pos_tag'] in check_list and stuff['word'].lower() in check_list[stuff['pos_tag']])\
                     or (root_tag in check_list and root.lower() in check_list[root_tag]):
                 # We can continue.
                 pos_tag=self.get_postag(stuff)
@@ -160,5 +170,34 @@ class MainParser(object):
                     if not match:
                         return False
             return True
-        except Exception, e:
+        except Exception as e:
             return False
+
+    def tokenize(self,parsed_sentence):
+        # This function is used to change it into the token pair for result querying.
+        pos_tag={}
+        label={}
+        def generate_token(obj):
+            if obj:
+                if obj['pos_tag'] in pos_tag:
+                    pos_tag[obj['pos_tag']].append(obj['word'])
+                else:
+                    pos_tag[obj['pos_tag']]=[obj['word']]
+                if obj['label'] in label:
+                    label[obj['label']].append(obj['word'])
+                else:
+                    label[obj['label']]=[obj['word']]
+            return obj
+        def loop_sentence(objs):
+            if type(objs)==list:
+                for obj in objs:
+                    if 'contains' in obj:
+                        loop_sentence(obj['contains'])
+                    generate_token(obj)
+            else:
+                if 'contains' in objs:
+                    loop_sentence(objs['contains'])
+                generate_token(objs)
+
+        loop_sentence(parsed_sentence)
+        return pos_tag,label

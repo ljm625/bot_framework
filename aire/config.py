@@ -7,8 +7,12 @@
 # @Software: PyCharm
 
 
-SYNTAXNET_IP='http://vm-bench-31:9000'
+SYNTAXNET_IP='http://localhost:9000'
 SPARK_TOKEN='MDRlNjhiNjktOGM2Mi00Mjk4LTk5MzYtOWRjZmU1ZWVlNzY4ZjJkMTg3NDItOWUw'
 SPARK_URL='https://api.ciscospark.com/v1/'
 BOT_ACCOUNT='aire@sparkbot.io'
 BOT_NAME='GimmeBot'
+LANGUAGE='en_US'
+DICT_PATH='C:\\Users\\jiaminli\\Documents\\big.txt'
+
+
